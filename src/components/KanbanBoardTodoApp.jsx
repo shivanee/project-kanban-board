@@ -7,6 +7,7 @@ import LogoutComponent from './LogoutComponent'
 import ErrorComponent from './ErrorComponent'
 import AuthProvider, { useAuth } from './security/AuthContext'
 import UpdateTodoComponent from './UpdateTodoComponent'
+import AddTodoComponent from './AddTodoComponent'
 
 function AuthenticatedRoute({children}){
     const authContext=useAuth()
@@ -34,6 +35,11 @@ export default function KanbanBoardTodoApp(){
                         <Route path='/kanban/:id' element={
                             <AuthenticatedRoute>
                                 <UpdateTodoComponent/>
+                            </AuthenticatedRoute>}/>
+                        <Route path='/logout' element={<LogoutComponent/>}/>
+                        <Route path='/kanban/add' element={
+                            <AuthenticatedRoute>
+                                <AddTodoComponent/>
                             </AuthenticatedRoute>}/>
                         <Route path='/logout' element={<LogoutComponent/>}/>
                         <Route path='*' element={<ErrorComponent/>}/>
