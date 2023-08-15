@@ -2,10 +2,11 @@ import './KanbanBoardTodoApp.css'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import HeaderComponent from'./HeaderComponent'
 import LoginComponent from './LoginComponent'
-import WelcomeComponent from './WelcomeComponent'
+import KanbanBoardComponent from './KanbanBoardComponent'
 import LogoutComponent from './LogoutComponent'
 import ErrorComponent from './ErrorComponent'
 import AuthProvider, { useAuth } from './security/AuthContext'
+import UpdateTodoComponent from './UpdateTodoComponent'
 
 function AuthenticatedRoute({children}){
     const authContext=useAuth()
@@ -25,10 +26,15 @@ export default function KanbanBoardTodoApp(){
                     <Routes>
                         <Route path='/' element={<LoginComponent/>}/>
                         <Route path='/login' element={<LoginComponent/>}/>
-                        <Route path='/welcome/:username' element={
-                        <AuthenticatedRoute>
-                            <WelcomeComponent/>
-                        </AuthenticatedRoute>}/>
+                        <Route path='/kanban' element={
+                            <AuthenticatedRoute>
+                                <KanbanBoardComponent/>
+                            </AuthenticatedRoute>}/>
+                        <Route path='/logout' element={<LogoutComponent/>}/>
+                        <Route path='/kanban/:id' element={
+                            <AuthenticatedRoute>
+                                <UpdateTodoComponent/>
+                            </AuthenticatedRoute>}/>
                         <Route path='/logout' element={<LogoutComponent/>}/>
                         <Route path='*' element={<ErrorComponent/>}/>
                     </Routes>

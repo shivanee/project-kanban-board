@@ -24,7 +24,7 @@ export default function LoginComponent(){
 
     function handleLoginButton(event){
         if(authContext.login(username, password)){
-            navigate(`/welcome/${username}`)
+            navigate('./kanban')
         } else {
             setErrorMessage(true)
         }

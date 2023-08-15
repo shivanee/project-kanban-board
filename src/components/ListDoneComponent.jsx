@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import {deleteTodoApi, retieveAllTodosForStatusApi} from './api/TodoApiService'
+import {retieveAllTodosForStatusApi,deleteTodoApi} from './api/TodoApiService'
 import { useNavigate } from "react-router-dom"
 
-export default function ListTodoComponent(){
+export default function ListDoneComponent(){
 
     const [todos,setTodos]=useState([])
-    
+
     const navigate = useNavigate()
 
     useEffect(
@@ -13,7 +13,7 @@ export default function ListTodoComponent(){
     )
 
     function refreshTodos(){
-        retieveAllTodosForStatusApi('To_Do')
+        retieveAllTodosForStatusApi('Done')
             .then(response=>{
                 setTodos(response.data)
             }
@@ -22,7 +22,7 @@ export default function ListTodoComponent(){
     }
 
     function deleteTodo(id){
-        deleteTodoApi('To_Do',id)
+        deleteTodoApi('In_Progress',id)
             .then(
                 ()=>{
                     refreshTodos()
@@ -38,7 +38,7 @@ export default function ListTodoComponent(){
     return(
         <div className='container p-2'>
             <div>
-                <h4 className="container p-2 card text-bg-primary mb-3">To Do</h4>
+                <h4 className="container p-2 card text-bg-success mb-3">Done</h4>
                 <ul className="list-unstyled">
                     {
                         todos.map((todo) => 
