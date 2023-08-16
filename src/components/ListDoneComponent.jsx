@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import {retieveAllTodosForStatusApi,deleteTodoApi} from './api/TodoApiService'
+import {retieveAllTodosForStatusApi,deleteTodoApi} from '../api/TodoApiService'
 import { useNavigate } from "react-router-dom"
 
 export default function ListDoneComponent(){
@@ -43,7 +43,7 @@ export default function ListDoneComponent(){
                     {
                         todos.map((todo) => 
                             (
-                                <li className="d-flex justify-content-around d-grid gap-3" key={todo.id}>
+                                <li className="d-flex justify-content-around d-grid gap-3" key={todo.id} draggable>
                                     <span className="p-2 mb-3">{todo.title}</span>
                                     <span className=" d-flex d-grid gap-3 justify-content-end">
                                         <button className="btn btn-info p-2 mb-2" onClick={()=>deleteTodo(todo.id)}>Delete</button>

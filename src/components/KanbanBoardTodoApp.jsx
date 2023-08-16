@@ -5,7 +5,7 @@ import LoginComponent from './LoginComponent'
 import KanbanBoardComponent from './KanbanBoardComponent'
 import LogoutComponent from './LogoutComponent'
 import ErrorComponent from './ErrorComponent'
-import AuthProvider, { useAuth } from './security/AuthContext'
+import AuthProvider, { useAuth } from '../security/AuthContext'
 import UpdateTodoComponent from './UpdateTodoComponent'
 import AddTodoComponent from './AddTodoComponent'
 
