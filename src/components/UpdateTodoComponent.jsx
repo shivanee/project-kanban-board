@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEffect } from "react"
 import { Formik,Form, Field, ErrorMessage } from "formik"
 import { useDispatch, useSelector } from "react-redux"
-import { retieveTaskById,updateTaskById } from "../redux/action";
+import { retieveTaskById } from "../redux/action";
 import { updateTodoApi } from "../api/TodoApiService";
 
 export default function UpdateTodoComponent(){
