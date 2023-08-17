@@ -9,14 +9,14 @@ function* getTodo() {
 function* getInProgress() {
   let data = yield fetch('http://localhost:8080/In_Progress/todos');
   data = yield data.json();
-  yield put({ type: "SET_TODO", data });
+  yield put({ type: "SET_IN_PROGRESS", data });
 }
 
 function* getDone() {
   let data = yield fetch('http://localhost:8080/Done/todos');
   data = yield data.json();
-  yield put({ type: "SET_TODO", data });
-}
+  yield put({ type: "SET_DONE", data });
+ }
 
 export default function* saga() {
   yield takeEvery("GET_TODO", getTodo);

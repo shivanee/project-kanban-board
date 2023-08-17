@@ -1,15 +1,15 @@
 const initialState = { todo: [], inProgress: [], done: [] };
 
-export const todoData = (state, action) => {
-  state = initialState;
+export const todoData = (state=initialState, action) => {  
+  console.log(action.type)
   switch (action.type) {
     case "SET_TODO":
       return { ...state, todo: [...action.data] };
-    case "SET_INPROGRESS":
+    case "SET_IN_PROGRESS":
       return { ...state, inProgress: [...action.data] };
     case "SET_DONE":
       return { ...state, done: [...action.data] };
     default:
-      return "No action";
+      return state;
   }
 };

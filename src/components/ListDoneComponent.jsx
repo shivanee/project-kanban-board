@@ -1,32 +1,29 @@
-import { useEffect, useState } from "react"
-import {retieveAllTodosForStatusApi,deleteTodoApi} from '../api/TodoApiService'
+import { useEffect} from "react"
+import {deleteTodoApi} from '../api/TodoApiService'
 import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux";
+import { retieveAllDone } from "../redux/action";
+
 
 export default function ListDoneComponent(){
 
-    const [todos,setTodos]=useState([])
-
     const navigate = useNavigate()
 
-    useEffect(
-        ()=>refreshTodos()
-    )
+    const dispatch = useDispatch(); 
 
-    function refreshTodos(){
-        retieveAllTodosForStatusApi('Done')
-            .then(response=>{
-                setTodos(response.data)
-            }
-            )
-            .catch(error=>console.log(error))
-    }
+
+    useEffect(()=>{
+        dispatch(retieveAllDone())
+      },[])
+
+    let todos = useSelector((state)=>state.todoData.done);
 
     function deleteTodo(id){
         deleteTodoApi('In_Progress',id)
             .then(
                 ()=>{
-                    refreshTodos()
-                }
+                    dispatch(retieveAllDone())
+                },[]
             )
             .catch((error)=>console.log(error))
     }
