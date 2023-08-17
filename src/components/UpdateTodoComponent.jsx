@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { retrieveTodoApi, updateTodoApi } from "../api/TodoApiService"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Formik,Form, Field, ErrorMessage } from "formik"
+import { useDispatch, useSelector } from "react-redux"
+import { retieveTaskById,updateTaskById } from "../redux/action";
+import { updateTodoApi } from "../api/TodoApiService";
 
 export default function UpdateTodoComponent(){
 
@@ -11,22 +13,17 @@ export default function UpdateTodoComponent(){
 
     const navigate=useNavigate()
 
-    const [title, setTitle]=useState('')
+    const dispatch = useDispatch();  
+  
+    useEffect(()=>{
+        dispatch(retieveTaskById(status,id))
+    },[])
 
-    const [statusToUpdate,setStatus]=useState('')
+    let result = useSelector((state)=>state.todoDataById);
 
-    useEffect(
-        ()=>retrieveTodo()
-    )
+    let title = result.title;
 
-    function retrieveTodo(){
-        retrieveTodoApi(status,id)
-            .then(response =>{
-                setTitle(response.data.title)
-                setStatus(response.data.status)
-            })
-            .catch((error)=>console.log(error))
-    }
+    let statusToUpdate = result.status;
 
     function onSubmit(values){
         const todo={
@@ -36,7 +33,7 @@ export default function UpdateTodoComponent(){
         }
 
         updateTodoApi(statusToUpdate,id,todo)
-            .then(response =>{navigate('/kanban') })
+            .then(() =>{navigate('/kanban') })
             .catch((error)=>console.log(error))
     }
 
@@ -49,8 +46,11 @@ export default function UpdateTodoComponent(){
             errors.title='Enter a title!'
         }
 
-        if(values.statusToUpdate.length<1){
-            errors.statusToUpdate='Status should be \'To_Do\' or \'In_Progress\' or \'Done\'!'
+        switch(values.statusToUpdate){
+            case "To_Do": 
+            case "In_Progress": 
+            case "Done": break;
+            default: errors.statusToUpdate='Status should be \'To_Do\' or \'In_Progress\' or \'Done\'!'
         }
 
         return errors

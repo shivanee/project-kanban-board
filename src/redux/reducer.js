@@ -1,6 +1,6 @@
 const initialState = { todo: [], inProgress: [], done: [] };
 
-export const todoData = (state=initialState, action) => {  
+export const todoData = (state=initialState, action) => { 
   switch (action.type) {
     case "SET_TODO":
       return { ...state, todo: [...action.data] };
@@ -10,5 +10,14 @@ export const todoData = (state=initialState, action) => {
       return { ...state, done: [...action.data] };
     default:
       return state;
+  }
+};
+
+export const todoDataById=(task=[],action)=>{
+  switch (action.type) {
+    case "SET_TASK":
+      return action.data;
+    default:
+      return task;
   }
 };

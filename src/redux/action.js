@@ -13,3 +13,11 @@ export const deleteTask = (status,id)=>{
         payload:{status,id}
     }
 }
+
+export const retieveTaskById = (status,id)=>{
+    
+    return {
+        type:"GET_TASK_BY_ID",
+        payload:{status,id}
+    }
+}

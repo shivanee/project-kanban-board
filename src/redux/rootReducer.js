@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import {todoData} from './reducer'
+import {todoData,todoDataById} from './reducer'
 
-export default combineReducers({todoData})
+export default combineReducers({todoData,todoDataById})
