@@ -6,8 +6,6 @@ const apiClient=axios.create(
     }
 )
 
-export const deleteTodoApi = (status,id)=>apiClient.delete(`/${status}/todos/${id}`)
-
 export const retrieveTodoApi = (status,id)=>apiClient.get(`/${status}/todos/${id}`)
 
 export const updateTodoApi = (status,id, todo)=>apiClient.put(`/${status}/todos/${id}`,todo)

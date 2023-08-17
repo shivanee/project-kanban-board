@@ -1,25 +1,35 @@
-import { takeEvery, put } from "redux-saga/effects";
+import { takeEvery, put, takeLatest } from "redux-saga/effects";
 
-function* getTodo() {
-  let data = yield fetch('http://localhost:8080/To_Do/todos');
+function* getTasks(action) {
+  let data = yield fetch(`http://localhost:8080/${action.payload}/todos`);
   data = yield data.json();
-  yield put({ type: "SET_TODO", data });
+  switch(action.payload){
+    case "To_Do":yield put({ type: "SET_TODO", data });
+    break;
+    case "In_Progress":yield put({ type: "SET_IN_PROGRESS", data });
+    break;
+    case "Done":yield put({ type: "SET_DONE", data });
+    break;
+    default:
+  }
 }
 
-function* getInProgress() {
-  let data = yield fetch('http://localhost:8080/In_Progress/todos');
+function* deleteTask(action) {
+  yield fetch(`http://localhost:8080/${action.payload.status}/todos/${action.payload.id}`,{method:'DELETE'});
+  let data = yield fetch(`http://localhost:8080/${action.payload.status}/todos`);
   data = yield data.json();
-  yield put({ type: "SET_IN_PROGRESS", data });
+  switch(action.payload.status){
+    case "To_Do":yield put({ type: "SET_TODO", data });
+    break;
+    case "In_Progress":yield put({ type: "SET_IN_PROGRESS", data });
+    break;
+    case "Done":yield put({ type: "SET_DONE", data });
+    break;
+    default:
+  }
 }
-
-function* getDone() {
-  let data = yield fetch('http://localhost:8080/Done/todos');
-  data = yield data.json();
-  yield put({ type: "SET_DONE", data });
- }
 
 export default function* saga() {
-  yield takeEvery("GET_TODO", getTodo);
-  yield takeEvery("GET_IN_PROGRESS", getInProgress);
-  yield takeEvery("GET_DONE", getDone);
+  yield takeEvery("GET_TASKS", getTasks);
+  yield takeLatest("DELETE_TASK",deleteTask);
 }

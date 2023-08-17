@@ -1,7 +1,6 @@
 const initialState = { todo: [], inProgress: [], done: [] };
 
 export const todoData = (state=initialState, action) => {  
-  console.log(action.type)
   switch (action.type) {
     case "SET_TODO":
       return { ...state, todo: [...action.data] };

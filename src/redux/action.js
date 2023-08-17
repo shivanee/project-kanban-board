@@ -1,20 +1,15 @@
-export const retieveAllTodo = ()=>{
+export const retieveAllTasks = (status)=>{
     
     return {
-        type:"GET_TODO"
+        type:"GET_TASKS",
+        payload:status
     }
 }
 
-export const retieveAllInProgress = ()=>{
+export const deleteTask = (status,id)=>{
     
     return {
-        type:'GET_IN_PROGRESS'
-    }
-}
-
-export const retieveAllDone = ()=>{
-    
-    return {
-        type:'GET_DONE'
+        type:'DELETE_TASK',
+        payload:{status,id}
     }
 }
