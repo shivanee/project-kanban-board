@@ -1,44 +1,86 @@
-import { useEffect} from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { retieveAllTasks,deleteTask } from "../redux/action";
+import { retieveAllTasks, deleteTask } from "../redux/action";
+import { updateTodoApi } from "../api/TodoApiService";
 
-export default function ListInProgressComponent(){
+export default function ListInProgressComponent() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch(); 
+  useEffect(() => {
+    dispatch(retieveAllTasks("In_Progress"));
+  }, []);
 
-    useEffect(()=>{
-        dispatch(retieveAllTasks("In_Progress"))
-      },[])
+  let todos = useSelector((state) => state.todoData.inProgress);
 
-    let todos = useSelector((state)=>state.todoData.inProgress);
+  function editTodo(id) {
+    navigate(`/kanban/${id}`);
+  }
 
-    function updateTodo(id){
-        navigate(`/kanban/${id}`)
-    }
+  const dragStarted = (e, id, title) => {
+    e.dataTransfer.setData("id", id);
+    e.dataTransfer.setData("title", title);
+  };
 
-    return(
-        <div className='container p-2'>
-            <div>
-                <h4 className="container p-2 card text-bg-warning mb-3">In Progress</h4>
-                <ul className="list-unstyled">
-                    {
-                        todos.map((todo) => 
-                            (
-                                <li className="d-flex justify-content-around d-grid gap-3" key={todo.id} draggable>
-                                    <span className="p-2 mb-3">{todo.title}</span>
-                                    <span className=" d-flex d-grid gap-3 justify-content-end">
-                                        <button className="btn btn-info p-2 mb-2" onClick={()=>dispatch(deleteTask(todo.status,todo.id))}>Delete</button>
-                                        <button className="btn btn-secondary p-2 mb-2" onClick={()=>updateTodo(todo.id)}>Update</button>
-                                    </span>
-                                </li>
-                            )
-                        )
-                    }
-                </ul>
-            </div>
-        </div>
-    )
+  const dragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const dragDropped = (e) => {
+    let droppedId = e.dataTransfer.getData("id");
+    let droppedTitle = e.dataTransfer.getData("title");
+    const todo = {
+      id: droppedId,
+      title: droppedTitle,
+      status: "In_Progress",
+    };
+    updateTodoApi("In_Progress", droppedId, todo)
+      .then(() => {
+        dispatch(retieveAllTasks("To_Do"));
+        dispatch(retieveAllTasks("In_Progress"));
+        dispatch(retieveAllTasks("Done"));
+      })
+      .catch((error) => console.log(error));
+  };
+
+  return (
+    <div
+      droppable
+      onDragOver={(e) => dragOver(e)}
+      onDrop={(e) => dragDropped(e)}
+      className="container p-2"
+    >
+      <div>
+        <h4 className="container p-2 card text-bg-warning mb-3">In Progress</h4>
+        <ul className="list-unstyled">
+          {todos.map((todo) => (
+            <li
+              className="d-flex justify-content-around d-grid gap-3"
+              key={todo.id}
+              draggable
+              onDragStart={(e) => dragStarted(e, todo.id, todo.title)}
+            >
+              <span className="p-2 mb-3">{todo.title}</span>
+              <span className=" d-flex d-grid gap-3 justify-content-end">
+                <button
+                  className="btn btn-info p-2 mb-2"
+                  onClick={() => dispatch(deleteTask(todo.status, todo.id))}
+                >
+                  Delete
+                </button>
+                <button
+                  className="btn btn-secondary p-2 mb-2"
+                  onClick={() => editTodo(todo.id)}
+                >
+                  Edit
+                </button>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
 }
