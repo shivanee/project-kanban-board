@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { retieveAllTasks, deleteTask } from "../redux/action";
@@ -8,6 +8,8 @@ export default function ListDoneComponent() {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
+  const [isHovering,setIsHovering]=useState(-1)
 
   useEffect(() => {
     dispatch(retieveAllTasks("Done"));
@@ -47,7 +49,7 @@ export default function ListDoneComponent() {
 
   return (
     <div
-      droppable
+      droppable="true"
       onDragOver={(e) => dragOver(e)}
       onDrop={(e) => dragDropped(e)}
       className="container p-2"
@@ -57,25 +59,32 @@ export default function ListDoneComponent() {
         <ul className="list-unstyled">
           {todos.map((todo) => (
             <li
-              className="d-flex justify-content-around d-grid gap-3"
+              className="d-flex justify-content-around d-grid gap-3 mb-3"
               key={todo.id}
-              draggable
+              draggable="true"
               onDragStart={(e) => dragStarted(e, todo.id, todo.title)}
+              onMouseEnter={()=>setIsHovering(todo.id)}
+              onMouseLeave={()=>setIsHovering(-1)}
             >
               <span className="p-2 mb-3">{todo.title}</span>
-              <span className=" d-flex d-grid gap-3 justify-content-end">
-                <button
-                  className="btn btn-info p-2 mb-2"
+              <span className=" d-grid gap-3 justify-content-end">
+              {isHovering===todo.id &&<img
+                  className="img gap-3 rounded float-right"
+                  src="/delete.png"
+                  alt="image"
                   onClick={() => dispatch(deleteTask(todo.status, todo.id))}
-                >
-                  Delete
-                </button>
-                <button
-                  className="btn btn-secondary p-2 mb-2"
+                  width="20px"
+                  height="20px"
+                />}
+                {isHovering===todo.id &&
+                <img
+                  className="img gap-3 rounded float-right"
+                  src="/edit.png"
+                  alt="image"
                   onClick={() => editTodo(todo.id)}
-                >
-                  Edit
-                </button>
+                  width="20px"
+                  height="20px"
+                />}
               </span>
             </li>
           ))}
